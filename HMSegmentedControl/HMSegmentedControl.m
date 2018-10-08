@@ -298,12 +298,16 @@
             BOOL locationUp = (self.selectionIndicatorLocation == HMSegmentedControlSelectionIndicatorLocationUp);
             BOOL selectionStyleNotBox = (self.selectionStyle != HMSegmentedControlSelectionStyleBox);
 
-            CGFloat y = roundf((CGRectGetHeight(self.frame) - selectionStyleNotBox * self.selectionIndicatorHeight) / 2 - stringHeight / 2 + self.selectionIndicatorHeight * locationUp);
+            CGFloat y = roundf(CGRectGetHeight(self.frame) - (selectionStyleNotBox * self.selectionIndicatorHeight) - stringHeight);
             CGRect rect;
+            CGFloat x;
             if (self.segmentWidthStyle == HMSegmentedControlSegmentWidthStyleFixed) {
-                rect = CGRectMake((self.segmentWidth * idx) + (self.segmentWidth - stringWidth) / 2, y, stringWidth, stringHeight);
-                rectDiv = CGRectMake((self.segmentWidth * idx) - (self.verticalDividerWidth / 2), self.selectionIndicatorHeight * 2, self.verticalDividerWidth, self.frame.size.height - (self.selectionIndicatorHeight * 4));
-                fullRect = CGRectMake(self.segmentWidth * idx, 0, self.segmentWidth, oldRect.size.height);
+                if (idx == 0) {
+                    x = (self.segmentWidth * idx) + ((self.segmentWidth - stringWidth) / 2) - self.selectionIndicatorEdgeInsets.right / 2;
+                } else {
+                    x = (self.segmentWidth * idx) + ((self.segmentWidth - stringWidth) / 2) + self.selectionIndicatorEdgeInsets.left / 2;
+                }
+                rect = CGRectMake(x, y, stringWidth, stringHeight);
             } else {
                 // When we are drawing dynamic widths, we need to loop the widths array to calculate the xOffset
                 CGFloat xOffset = 0;
